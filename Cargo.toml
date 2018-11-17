@@ -2,5 +2,6 @@
 name = "base2"
 version = "0.1.0"
 authors = ["Sergey Shandar"]
+description = "Base-2 functions"
 
 [dependencies]
