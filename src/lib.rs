@@ -1,4 +1,4 @@
-/// floor(log(2, v))
+/// `floor(log(2, v))`
 ///
 /// Examples
 ///
@@ -20,7 +20,7 @@ pub fn floor_log2(mut v: u32) -> u32 {
     result
 }
 
-/// 2^p
+/// `2^p`
 ///
 /// Examples
 ///
