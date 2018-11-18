@@ -63,4 +63,3 @@ impl<T: UInt> Base2 for T {
         if p >= Self::BIT_COUNT { Self::MAX_VALUE } else { Self::exp2(p) - Self::_1 }
     }
 }
-
