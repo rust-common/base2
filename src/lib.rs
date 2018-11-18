@@ -14,7 +14,12 @@ pub trait Base2 {
     /// assert_eq!(2_u32.floor_log2(), 1);
     /// assert_eq!(3_u64.floor_log2(), 1);
     /// assert_eq!(4_u128.floor_log2(), 2);
+    /// assert_eq!(5_u8.floor_log2(), 2);
+    /// assert_eq!(6_u8.floor_log2(), 2);
+    /// assert_eq!(7_u16.floor_log2(), 2);
     /// assert_eq!(8_usize.floor_log2(), 3);
+    /// assert_eq!(9_u16.floor_log2(), 3);
+    /// assert_eq!(0xFF_u8.floor_log2(), 7);
     /// ```
     fn floor_log2(self) -> u8;
 
@@ -50,13 +55,20 @@ pub trait Base2 {
 
 impl<T: UInt> Base2 for T {
     fn floor_log2(mut self) -> u8 {
+        if self == Self::_0 { return 0 }
         let mut result = 0;
+        let mut size = Self::BIT_COUNT;
         loop {
-            self >>= 1;
-            if self == Self::_0 { break; }
-            result += 1;
+            if size == 1 {
+                break result + self.as_() - 1;
+            }
+            size /= 2;
+            let hi = self >> size;
+            if hi != Self::_0 {
+                result += size;
+                self = hi;
+            }
         }
-        result
     }
     fn exp2(p: u8) -> Self { Self::_1 << p }
     fn mask(p: u8) -> Self {
