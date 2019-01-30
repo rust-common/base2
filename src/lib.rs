@@ -1,7 +1,5 @@
 extern crate int;
 
-use int::UInt;
-
 pub trait Base2 {
     /// `floor(log(2, v))`
     ///
@@ -54,7 +52,7 @@ pub trait Base2 {
     fn mask(p: u8) -> Self;
 }
 
-impl<T: UInt> Base2 for T {
+impl<T: int::UInt> Base2 for T {
     fn floor_log2(self) -> u8 {
         let r = Self::BIT_COUNT - (self.leading_zeros() as u8);
         if r == 0 { 0 } else { r - 1 }
