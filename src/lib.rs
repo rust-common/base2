@@ -1,6 +1,6 @@
 extern crate int;
 
-pub trait Base2 {
+pub trait Base2: int::UInt {
     /// `floor(log(2, v))`
     ///
     /// Examples
@@ -20,7 +20,10 @@ pub trait Base2 {
     /// assert_eq!(0xFF_u8.floor_log2(), 7);
     /// assert_eq!(u128::max_value().floor_log2(), 127);
     /// ```
-    fn floor_log2(self) -> u8;
+    fn floor_log2(self) -> u8 {
+        let r = Self::BIT_COUNT - (self.leading_zeros() as u8);
+        if r == 0 { 0 } else { r - 1 }
+    }
 
     /// `2^p`
     ///
@@ -35,7 +38,7 @@ pub trait Base2 {
     /// assert_eq!(u128::exp2(4), 16);
     /// assert_eq!(usize::exp2(5), 32);
     /// ```
-    fn exp2(p: u8) -> Self;
+    fn exp2(p: u8) -> Self { Self::_1 << p }
 
     /// A mask with a `p` number of bits.
     ///
@@ -49,16 +52,9 @@ pub trait Base2 {
     /// assert_eq!(usize::mask(5), 0b11111);
     /// assert_eq!(u8::mask(8), 0b1111_1111);
     /// ```
-    fn mask(p: u8) -> Self;
-}
-
-impl<T: int::UInt> Base2 for T {
-    fn floor_log2(self) -> u8 {
-        let r = Self::BIT_COUNT - (self.leading_zeros() as u8);
-        if r == 0 { 0 } else { r - 1 }
-    }
-    fn exp2(p: u8) -> Self { Self::_1 << p }
     fn mask(p: u8) -> Self {
         if p >= Self::BIT_COUNT { Self::MAX_VALUE } else { Self::exp2(p) - Self::_1 }
     }
 }
+
+impl<T: int::UInt> Base2 for T {}
